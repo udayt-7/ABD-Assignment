@@ -1,0 +1,19 @@
+5a.Find the total count of player details with "david"
+
+23
+
+b) Create a patition on the TEAMID
+
+create table teamID_Partition(playerID varchar(30), yearID int,stint int,lgID varchar(10),G int,G_batting int,AB int,R int,H int, B2 int, B3 int,HR int,RBI int,SB int,CS int,BB int,SO int,IBB int,HBP int,SH int,SF int,GIDP int,G_old int) partitioned by (teamID varchar(10)) CLUSTERED BY yearID INTO 3 buckets row format delimited fields terminated by ',' stored as textfile;
+
+set hive.exec.dynamic.partition.mode=nonstrict;
+set hive.exec.dynamic.partition=true;
+set hive.enforce.bucketing=true;
+set hive.exec.max.dynamic.partitions=2048;
+set hive.exec.max.dynamic.partitions.pernode=256;
+
+
+
+c) Create 3 buckets on the partition.
+d) Extract the details on player "aaronha01"
+e) Find the count of teams

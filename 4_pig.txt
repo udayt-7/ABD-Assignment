@@ -1,0 +1,89 @@
+-----
+4 PIG
+-----
+
+pig -x local
+
+b_list = LOAD '/home/cloudera/Desktop/ABD/b1.csv' USING PigStorage(',') as (playerID:chararray,yearID:int,stint:int,teamID:chararray,lgID:chararray,G:int,G_batting:int,AB:int,R:int,H:int,B2:int,B3:int,HR:int,RBI:int,SB:int,CS:int,BB:int,SO:int,IBB:int,HBP:int,SH:int,SF:int,GIDP:int,G_old:int);
+
+dump b_list;
+
+4a...__________________________________________________
+
+gc = FILTER b_list BY G == 112;
+dump gc;
+
+gcount  = GROUP gc All;
+dump gcount;
+
+total_count = foreach gcount Generate COUNT(gc.G);
+dump total_count;
+store total_count  into 'gc112'; 
+------
+269
+-------
+
+4b..."david"____________________________________________
+
+david  = Filter b_list by(playerID MATCHES 'david.*');
+dump david;
+
+--------------------------------------------------------------------------
+(davidan01,1984,1,MIN,AL,33,33,48,5,12,2,0,1,5,0,0,7,11,2,1,0,1,2,33)
+(davidan01,1986,1,MIN,AL,5,5,5,0,1,0,0,0,0,0,0,0,2,0,1,0,0,0,5)
+(davidbi01,1909,1,CHN,NL,2,2,7,2,1,0,0,0,0,1,,1,,,0,0,,,2)
+(davidbi01,1910,1,BRO,NL,136,136,509,48,121,13,7,0,34,27,,24,54,,4,12,,,136)
+(davidbi01,1911,1,BRO,NL,87,87,292,33,68,3,4,1,26,18,,16,21,,1,8,,,87)
+(davidbo01,1989,1,NYA,AL,1,0,,,,,,,,,,,,,,,,,1)
+(davidcl01,1918,1,PHA,AL,31,31,81,4,15,1,0,0,4,0,,5,9,,0,4,,,31)
+(davidcl01,1919,1,WS1,AL,2,2,7,1,3,0,0,0,0,0,,1,1,,0,1,,,2)
+(davidcl02,1999,1,MIN,AL,12,12,22,3,3,0,0,0,3,2,0,0,4,0,0,2,0,2,12)
+(davidda01,2007,1,PIT,NL,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2)
+(davidda01,2009,1,FLO,NL,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,)
+(davidho01,1908,1,CLE,AL,9,9,4,2,0,0,0,0,0,1,,0,,,0,0,,,9)
+(davidma01,1986,1,MIN,AL,36,36,68,5,8,3,0,0,2,2,3,6,22,0,0,3,0,1,36)
+(davidma01,1987,1,MIN,AL,102,102,150,32,40,4,1,1,14,9,2,13,26,1,0,4,2,4,102)
+(davidma01,1988,1,MIN,AL,100,100,106,22,23,7,0,1,10,3,3,10,20,0,1,1,1,3,100)
+(davidma01,1989,1,HOU,NL,33,33,65,7,13,2,1,1,5,1,0,7,14,0,0,1,0,1,33)
+(davidma01,1990,1,HOU,NL,57,57,130,12,38,5,1,1,11,0,3,10,18,1,0,1,1,1,57)
+(davidma01,1991,1,HOU,NL,85,85,142,10,27,6,0,2,15,0,0,12,28,0,2,0,0,2,85)
+(davidte01,1965,1,CIN,NL,24,24,17,0,0,0,0,0,0,0,0,0,11,0,0,2,0,0,24)
+(davidte01,1966,1,CIN,NL,54,54,12,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,54)
+(davidte01,1967,1,CIN,NL,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9)
+(davidte01,1968,1,CIN,NL,23,23,2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,23)
+(davidte01,1968,2,ATL,NL,4,4,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,4)
+----------------------------------------------------------------------------
+
+4c...average  "NL"________________________________________
+
+
+
+NL_1 = Filter b_list by lgID =='NL';
+NL_2 = Group NL_1 All;
+NL_avg = foreach NL_2 Generate AVG(NL_1.G_batting);
+DUMP NL_avg
+
+
+-------------------------------------------------------------------
+Input(s):
+Successfully read records from: "/home/cloudera/Desktop/ABD/b1.csv"
+
+Output(s):
+Successfully stored records in: "file:/tmp/temp490521505/tmp1665379481"
+----------------------------------------------------------------------
+
+4d... count of teams_____________________________________________________
+
+
+team = GROUP b_list by teamID;
+team_group = GROUP team All;
+team_count = Foreach team_group Generate COUNT(team);
+dump team_count
+
+-------------------------------------------------------------------------
+Input(s):
+Successfully read records from: "/home/cloudera/Desktop/ABD/b1.csv"
+
+Output(s):
+Successfully stored records in: "file:/tmp/temp-1618079088/tmp1787253337"
+---------------------------------------------------------------------------

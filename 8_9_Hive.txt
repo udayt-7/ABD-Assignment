@@ -1,0 +1,30 @@
+create table hallOF_sample(hofID varchar(30), yearID int, votedBy varchar(20),ballots int,needed int,votes int,inducted varchar(5),category varchar(50), needed_note varchar(10)) row format delimited fields terminated by ',' stored as textfile;
+
+load data local inpath '/home/cloudera/Desktop/ABD/DataFiles/HallOfFame.csv' into table hallOF_sample;
+
+create table hallOF(hofID varchar(30),votedBy varchar(20),ballots int,needed int,votes int,inducted varchar(5),category varchar(50), needed_note varchar(10)) partitioned by (yearID int) row format delimited fields terminated by ',' stored as textfile;
+
+from hallOF_sample h INSERT OVERWRITE TABLE hallOF PARTITION(yearID) select h.hofID, h.yearID, h.votedBy, h.ballots, h.needed, h.votes, h.inducted, h.category, h.needed_note DISTRIBUTE by yearID;
+
+
+
+--a)List the managers.
+
+select DISTINCT(votedBy) from hallOF;
+
+--b) Find the numbers of votes got year wise by "chancfr01h".
+
+select yearID, sum(votes) from hallOF where hofID='chancfr01h' group by yearID;
+
+
+
+--c) find the year wise count of participants
+
+select yearID,count(hofID) from hallOF group by yearID;
+
+
+--d)find the total votes got by the players. 
+
+select hofID, sum(votes) from hallOF group by hofID;
+
+select sum(votes) from hallOF where category== 'Player';

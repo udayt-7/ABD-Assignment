@@ -1,0 +1,14 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('Batting.csv')
+play = df.groupby('yearID').agg({'playerID':'count'})
+play = play.reset_index()
+plt.figure(figsize=(30,15))
+y = play.yearID
+p = play.playerID
+y_pos = np.arange(len(y))
+plt.bar(y_pos, p)
+plt.xticks(y_pos, y, rotation = 90)
+plt.show()
